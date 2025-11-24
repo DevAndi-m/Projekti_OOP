@@ -9,7 +9,7 @@ public class EmailService implements NotificationService {
 
     @Override
     public void sendNotification(String message) {
-        System.out.println("Duke dërguar EMAIL...");
+        System.out.println("Duke derguar EMAIL...");
         System.out.println("Te: " + receiverEmail);
         System.out.println("Mesazhi: " + message);
     }

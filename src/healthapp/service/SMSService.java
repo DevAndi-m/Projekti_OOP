@@ -9,8 +9,8 @@ public class SMSService implements NotificationService {
 
     @Override
     public void sendNotification(String message) {
-        System.out.println("Duke dërguar SMS...");
-        System.out.println("Në numrin: " + phoneNumber);
+        System.out.println("Duke derguar SMS...");
+        System.out.println("Ne numrin: " + phoneNumber);
         System.out.println("Mesazhi: " + message);
     }
 }
