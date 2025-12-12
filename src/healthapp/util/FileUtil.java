@@ -19,10 +19,12 @@ public class FileUtil {
     private static final String APPOINTMENT_FILE = "appointments.txt";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    // ------------------- Doctor Methods -------------------
     public static List<Doctor> loadDoctors() {
         List<Doctor> doctors = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(DOCTOR_FILE))) {
+        File file = new File(DOCTOR_FILE);
+        if (!file.exists()) return doctors;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
@@ -34,32 +36,18 @@ public class FileUtil {
                 doctors.add(new Doctor(id, name, phone, email, specialty));
             }
         } catch (IOException e) {
-            // File might not exist yet, ignore
+            e.printStackTrace();
+            System.out.println("Gabim gjatë ngarkimit të doktorëve!");
         }
         return doctors;
     }
 
-    public static void saveDoctors(List<Doctor> doctors) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(DOCTOR_FILE))) {
-            for (Doctor d : doctors) {
-                pw.printf("%d|%s|%s|%s|%s%n", d.getId(), d.getName(), d.getPhone(), d.getEmail(), d.getSpecialty());
-            }
-        } catch (IOException e) {
-            System.out.println("Gabim gjatë ruajtjes së doktorëve!");
-        }
-    }
-
-    public static Doctor findDoctorById(List<Doctor> doctors, int id) {
-        for (Doctor d : doctors) {
-            if (d.getId() == id) return d;
-        }
-        return null;
-    }
-
-    // ------------------- Patient Methods -------------------
     public static List<Patient> loadPatients() {
         List<Patient> patients = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(PATIENT_FILE))) {
+        File file = new File(PATIENT_FILE);
+        if (!file.exists()) return patients;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
@@ -71,32 +59,18 @@ public class FileUtil {
                 patients.add(new Patient(id, name, phone, email, age));
             }
         } catch (IOException e) {
-            // File might not exist yet, ignore
+            e.printStackTrace();
+            System.out.println("Gabim gjatë ngarkimit të pacientëve!");
         }
         return patients;
     }
 
-    public static void savePatients(List<Patient> patients) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(PATIENT_FILE))) {
-            for (Patient p : patients) {
-                pw.printf("%d|%s|%s|%s|%d%n", p.getId(), p.getName(), p.getPhone(), p.getEmail(), p.getAge());
-            }
-        } catch (IOException e) {
-            System.out.println("Gabim gjatë ruajtjes së pacientëve!");
-        }
-    }
-
-    public static Patient findPatientById(List<Patient> patients, int id) {
-        for (Patient p : patients) {
-            if (p.getId() == id) return p;
-        }
-        return null;
-    }
-
-    // ------------------- Appointment Methods -------------------
     public static List<Appointment> loadAppointments(List<Doctor> doctors, List<Patient> patients) {
         List<Appointment> appointments = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(APPOINTMENT_FILE))) {
+        File file = new File(APPOINTMENT_FILE);
+        if (!file.exists()) return appointments;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
@@ -117,36 +91,68 @@ public class FileUtil {
                 }
             }
         } catch (IOException | ParseException e) {
-            // File might not exist yet, ignore
+            e.printStackTrace();
+            System.out.println("Gabim gjatë ngarkimit të takimeve!");
         }
         return appointments;
+    }
+
+    // ------------------- Save Methods -------------------
+    public static void saveDoctors(List<Doctor> doctors) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(DOCTOR_FILE))) {
+            for (Doctor d : doctors) {
+                pw.println(d.getId() + "|" + d.getName() + "|" + d.getPhone() + "|" +
+                        d.getEmail() + "|" + d.getSpecialty());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Gabim gjatë ruajtjes së doktorëve!");
+        }
+    }
+
+    public static void savePatients(List<Patient> patients) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(PATIENT_FILE))) {
+            for (Patient p : patients) {
+                pw.println(p.getId() + "|" + p.getName() + "|" + p.getPhone() + "|" +
+                        p.getEmail() + "|" + p.getAge());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Gabim gjatë ruajtjes së pacientëve!");
+        }
     }
 
     public static void saveAppointments(List<Appointment> appointments) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(APPOINTMENT_FILE))) {
             for (Appointment a : appointments) {
-                pw.printf("%d|%d|%d|%s|%s|%s%n",
-                        a.getId(),
-                        a.getPatient().getId(),
-                        a.getStaff().getId(),
-                        sdf.format(a.getDate()),
-                        a.getReport() == null ? "null" : a.getReport(),
-                        a.getStatus().name()
-                );
+                pw.println(a.getId() + "|" +
+                        a.getPatient().getId() + "|" +
+                        a.getDoctor().getId() + "|" +
+                        sdf.format(a.getDate()) + "|" +
+                        (a.getReport() == null ? "null" : a.getReport()) + "|" +
+                        a.getStatus().name());
             }
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("Gabim gjatë ruajtjes së takimeve!");
         }
     }
 
-    public static Appointment findAppointmentById(List<Appointment> appointments, int id) {
-        for (Appointment a : appointments) {
-            if (a.getId() == id) return a;
-        }
+    public static Doctor findDoctorById(List<Doctor> doctors, int id) {
+        for (Doctor d : doctors) if (d.getId() == id) return d;
         return null;
     }
 
-    // ------------------- Utility Method -------------------
+    public static Patient findPatientById(List<Patient> patients, int id) {
+        for (Patient p : patients) if (p.getId() == id) return p;
+        return null;
+    }
+
+    public static Appointment findAppointmentById(List<Appointment> appointments, int id) {
+        for (Appointment a : appointments) if (a.getId() == id) return a;
+        return null;
+    }
+
     public static int getNextId(List<?> list) {
         int maxId = 0;
         for (Object obj : list) {

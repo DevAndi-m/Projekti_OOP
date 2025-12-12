@@ -4,6 +4,9 @@ import healthapp.model.Appointment;
 import healthapp.model.AppointmentStatus;
 import healthapp.model.Doctor;
 import healthapp.model.Patient;
+import healthapp.service.EmailService;
+import healthapp.service.NotificationService;
+import healthapp.service.SMSService;
 import healthapp.util.FileUtil;
 
 import java.text.ParseException;
@@ -89,7 +92,21 @@ public class AppointmentMenu {
         appointments.add(a);
         FileUtil.saveAppointments(appointments);
         System.out.println("Takimi u shtua: " + a);
+
+        String message = "Takimi juaj me Dr. " + doctor.getName() +
+                " është planifikuar për " + sdf.format(date);
+
+        if (patient.getEmail() != null) {
+            NotificationService email = new EmailService(patient.getEmail());
+            email.sendNotification(message);
+        }
+
+        if (patient.getPhone() != null) {
+            NotificationService sms = new SMSService(patient.getPhone());
+            sms.sendNotification(message);
+        }
     }
+
 
     private static void showAppointments() {
         if (appointments.isEmpty()) {

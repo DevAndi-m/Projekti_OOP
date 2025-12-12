@@ -28,5 +28,7 @@ public class Doctor extends Person {
         );
     }
 
-
+    public String toString() {
+        return super.toString() + "|" + getSpecialty();
+    }
 }

@@ -39,14 +39,23 @@ public class DoctorMenu {
 
     private static void addDoctor() {
         int id = FileUtil.getNextId(doctors);
-        System.out.print("Emri: "); String name = sc.nextLine();
-        System.out.print("Telefon: "); String phone = sc.nextLine();
-        System.out.print("Email: "); String email = sc.nextLine();
-        System.out.print("Specializimi: "); String specialty = sc.nextLine();
+
+        System.out.print("Emri: ");
+        String name = sc.nextLine();
+
+        System.out.print("Telefon: ");
+        String phone = sc.nextLine();
+
+        System.out.print("Email: ");
+        String email = sc.nextLine();
+
+        System.out.print("Specializimi: ");
+        String specialty = sc.nextLine();
 
         Doctor d = new Doctor(id, name, phone, email, specialty);
         doctors.add(d);
         FileUtil.saveDoctors(doctors);
+
         System.out.println("Doktori u shtua: " + d);
     }
 

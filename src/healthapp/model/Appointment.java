@@ -5,16 +5,16 @@ import java.util.Objects;
 public class Appointment {
     private int id;
     private Patient patient;
-    private Doctor staff;
+    private Doctor doctor;
     private Date date;
     private String report;
     private AppointmentStatus status;
 
     // kostruktori, raporti pas perfundimit te appointmentStatus
-    public Appointment(int id, Patient patient, Doctor staff, Date date) {
+    public Appointment(int id, Patient patient, Doctor doctor, Date date) {
         this.id = id;
         this.patient = patient;
-        this.staff = staff;
+        this.doctor = doctor;
         this.date = date;
 
         this.status = AppointmentStatus.SCHEDULED;
@@ -29,8 +29,8 @@ public class Appointment {
         return patient;
     }
 
-    public Doctor getStaff() {
-        return staff;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
     public Date getDate() {
@@ -46,7 +46,7 @@ public class Appointment {
     }
 
     public void setPatient(Patient patient) { this.patient = patient; }
-    public void setStaff(Doctor staff) { this.staff = staff; }
+    public void setStaff(Doctor doctor) { this.doctor = doctor; }
     public void setDate(Date date) { this.date = date; }
     public void setReport(String report) { this.report = report; }
     public void setStatus(AppointmentStatus status) { this.status = status; }
@@ -67,13 +67,12 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return String.format("Takimi #%d: Pacienti [%s], Doktori [%s], Data: %s, Statusi: %s, Raporti: %s",
-            id,
-            patient.getName(),
-            staff.getName(),
-            date,
-            status.getDescription(),
-            report == null ? "N/A" : report
-        );
+        return id + "|" +
+                patient.getId() + "|" +
+                doctor.getId() + "|" +
+                date.getTime() + "|" +   // safer than formatting
+                (report == null ? "null" : report) + "|" +
+                status.name();
     }
+
 }

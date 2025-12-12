@@ -19,4 +19,8 @@ public class Patient extends Person {
         return String.format("Pacienti: %s (ID: %d), Mosha: %d, Telefoni: %s, Email: %s",
                 getName(), getId(), age, getPhone(), getEmail());
     }
+
+    public String toString() {
+        return super.toString() + "|" + age;
+    }
 }

@@ -61,6 +61,6 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return String.format("Id: %d, Emri: %s, Telefoni: %s, Email: %s", id, name, phone, email);
+        return getId() + "|" + getName() + "|" + getPhone() + "|" + getEmail();
     }
 }
