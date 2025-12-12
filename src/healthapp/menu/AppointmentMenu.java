@@ -36,18 +36,15 @@ public class AppointmentMenu {
             System.out.print("Zgjedhja: ");
             String choice = sc.nextLine().toUpperCase();
 
-            if (choice.equals("1")) {
-                addAppointment();
-            } else if (choice.equals("2")) {
-                showAppointments();
-            } else if (choice.equals("3")) {
-                editAppointment();
-            } else if (choice.equals("4")) {
-                deleteAppointment();
-            } else if (choice.equals("R")) {
-                return;
-            } else {
-                System.out.println("Opsion i pavlefshëm!");
+            switch (choice) {
+                case "1" -> addAppointment();
+                case "2" -> showAppointments();
+                case "3" -> editAppointment();
+                case "4" -> deleteAppointment();
+                case "R" -> {
+                    return;
+                }
+                default -> System.out.println("Opsion i pavlefshëm!");
             }
         }
     }
