@@ -45,13 +45,12 @@ public class Appointment {
         return status;
     }
 
-    public void setReport(String report) {
-        this.report = report;
-    }
+    public void setPatient(Patient patient) { this.patient = patient; }
+    public void setStaff(Doctor staff) { this.staff = staff; }
+    public void setDate(Date date) { this.date = date; }
+    public void setReport(String report) { this.report = report; }
+    public void setStatus(AppointmentStatus status) { this.status = status; }
 
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
-    }
 
     @Override
     public boolean equals(Object obj) {
